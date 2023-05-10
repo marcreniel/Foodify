@@ -1,11 +1,12 @@
 'use client';
 
+import type { NextPage } from 'next'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 
-const Main = () => {
+const Main: NextPage = () => {
   const router = useRouter();
   const { data: data, status } = useSession({
     required: true,
