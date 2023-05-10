@@ -1,16 +1,15 @@
 'use client';
 
 import { signIn, signOut, useSession } from 'next-auth/react'
-import Link from "next/link";
+import { useRouter } from 'next/navigation';
+
 const Main = () => {
-  const { status, data } = useSession({
-    required: true,
-    onUnauthenticated() {
-     signIn()
-    },
-  })
+  const router = useRouter();
+  const { status, data } = useSession()
   
-  return(
+  if (status != 'authenticated') {
+    router.push('/')
+  } return(
     <main className="flex flex-col hero min-h-screen bg-base-200">
       <div>
         <h1>
@@ -24,7 +23,7 @@ const Main = () => {
       <div>
         <p>
           {status === 'authenticated' ? (
-            <Link className="btn" href="/" onClick={() => signOut() } >Sign out {data.user?.email}</Link>
+            <button className="btn" onClick={() => signOut()} >Sign out {data.user?.email}</button>
             ) : null}
         </p>
       </div>
