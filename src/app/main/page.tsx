@@ -1,12 +1,13 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 
 const Main = () => {
   const router = useRouter();
-  const { status, data } = useSession()
-  
+  const { data, status } = useSession();
   if (status != 'authenticated') {
     router.push('/')
   } return(
@@ -21,11 +22,7 @@ const Main = () => {
         </h1>
       </div>
       <div>
-        <p>
-          {status === 'authenticated' ? (
-            <button className="btn" onClick={() => signOut()} >Sign out {data.user?.email}</button>
-            ) : null}
-        </p>
+        <button onClick={() => signOut()} className="btn">Sign Out</button>
       </div>
     </main>
   )
