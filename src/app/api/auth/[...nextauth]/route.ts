@@ -5,6 +5,7 @@ import SpotifyProvider from "next-auth/providers/spotify";
 const scope = 'user-top-read'
 
 export const authOptions: NextAuthOptions = {
+    secret: process.env.JWT_TOKEN!,
     providers: [
         SpotifyProvider({
           clientId: process.env.SPOTIFY_CLIENT_ID!,
@@ -14,7 +15,6 @@ export const authOptions: NextAuthOptions = {
           },
         })
       ],
-    secret: process.env.JWT_SECRET!,
     callbacks: {
       async jwt({ token, account }) {
         if (account) {
