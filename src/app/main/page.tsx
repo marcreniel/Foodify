@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 
 const Main: NextPage = () => {
   const router = useRouter();
-  const [list, setList] = useState([]);
+  const [songList, setSongList] = useState([]);
+  const [lyricsList, setLyricsList] = useState([]);
   const { data, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -22,7 +23,12 @@ const Main: NextPage = () => {
   const getTracks = async () => {
     const res = await fetch('/api/topTracks');
     const {items} = await res.json();
-    setList(items);
+    /* items.forEach(async(item) => {
+      const lyrics = await fetch(`/api/lyricsFetcher?id=${item.id}`);
+
+    }); 
+    setSongList(songList); */
+    setSongList(items);
   };
 
   if(status === 'authenticated') {
@@ -40,7 +46,7 @@ const Main: NextPage = () => {
         <div>
           <button onClick={() => signOut()} className="btn">Sign Out</button>
         </div>
-        {list.map((item) => (
+        {songList.map((item) => (
             <div key={item.id}>
               <h1>{item.name}</h1>
             </div>
