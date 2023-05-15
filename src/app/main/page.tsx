@@ -23,12 +23,12 @@ const Main: NextPage = () => {
   const getTracks = async () => {
     const res = await fetch('/api/topTracks');
     const {items} = await res.json();
-    /* items.forEach(async(item) => {
-      const lyrics = await fetch(`/api/lyricsFetcher?id=${item.id}`);
-
+    items.forEach(async(item) => {
+      const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}`);
+      const lyrics = await lyricsRes.json();
+      console.log(lyrics);
     }); 
-    setSongList(songList); */
-    setSongList(items);
+    setSongList(songList); 
   };
 
   if(status === 'authenticated') {

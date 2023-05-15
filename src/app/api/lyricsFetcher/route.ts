@@ -13,8 +13,9 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
-        const response = await getLyrics("6AQbmUe0Qwf5PZnt4HmTXv");
+        const response = await getLyrics(id);
         const combinedWords = response.lines.map(line => line.words).join(' ');
+        
         return NextResponse.json({ result: combinedWords });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching API' });

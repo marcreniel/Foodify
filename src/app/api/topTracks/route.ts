@@ -16,6 +16,7 @@ export async function GET() {
     try {
         const response = await getTopTracks(accessToken);
         const {items} = await response.json();
+        
         return NextResponse.json({ items });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching API' });
