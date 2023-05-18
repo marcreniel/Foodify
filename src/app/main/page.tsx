@@ -21,14 +21,18 @@ const Main: NextPage = () => {
   }, []);
 
   const getTracks = async () => {
+    const lyricsHolder: JSON[] = []; 
     const res = await fetch('/api/topTracks');
     const {items} = await res.json();
-    items.forEach(async(item) => {
+    setSongList(items); 
+
+    await items.forEach(async(item) => {
       const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}`);
       const lyrics = await lyricsRes.json();
-      console.log(lyrics);
+      lyricsList.push(lyrics);
+      setLyricsList(lyricsHolder as never[])
+      console.log(lyricsList);
     }); 
-    setSongList(songList); 
   };
 
   if(status === 'authenticated') {
