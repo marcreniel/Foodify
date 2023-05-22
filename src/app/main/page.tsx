@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 
 const Main: NextPage = () => {
   const router = useRouter();
-  const [songList, setSongList] = useState([]);
   const [lyricsList, setLyricsList] = useState<JSON[]>([]);
   const { data, status } = useSession({
     required: true,
@@ -24,14 +23,11 @@ const Main: NextPage = () => {
     const lyricsHolder: JSON[] = []; 
     const res = await fetch('/api/topTracks');
     const { items } = await res.json();
-    setSongList(items); 
-    console.log(items);
   
     await Promise.all(items.map(async (item) => {
       const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}&song=${item.name}`);
       const lyrics = await lyricsRes.json();
       lyricsHolder.push(lyrics);
-      console.log(lyricsHolder);
     }));
   
     setLyricsList(lyricsHolder);
