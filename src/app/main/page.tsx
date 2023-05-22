@@ -28,9 +28,10 @@ const Main: NextPage = () => {
     console.log(items);
   
     await Promise.all(items.map(async (item) => {
-      const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}`);
+      const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}&song=${item.name}`);
       const lyrics = await lyricsRes.json();
       lyricsHolder.push(lyrics);
+      console.log(lyricsHolder);
     }));
   
     setLyricsList(lyricsHolder);
@@ -52,16 +53,24 @@ const Main: NextPage = () => {
         <div>
           <button onClick={() => signOut()} className="btn">Sign Out</button>
         </div>
-        {[...songList, ...lyricsList].map((item) => (
-          <div key={item.id}>
-            {item.name && item.llmResponse && (
-              <h1>{`${item.name} - ${item.llmResponse.food}`}</h1>
-            )}
-            {item.llmResponse && (
-              <p>{item.llmResponse.reason}</p>
-            )}
-          </div>
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Food</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lyricsList.map((item) => (
+              <tr key={item.id}>
+                <td>{item.llmResponse.song}</td>
+                <td>{item.llmResponse.food}</td>
+                <td>{item.llmResponse.reason}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </main>
     )
   }

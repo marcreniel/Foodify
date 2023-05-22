@@ -35,13 +35,14 @@ export const getLyrics = async (song: string) => {
   return lyrics.json();
 }
 
-export const fetchLLM = async (lyrics: string) => {
+export const fetchLLM = async (lyrics: string, name: string) => {
   const prompt = `
     Suggest me a food based off the mood and tone of these lyrics on JSON strictly:
 
     Input:${lyrics}
     Response (In JSON strictly, do not alter anything else about the format, only except where it says insert):
     {
+      song: ${name}
       food: (insert food here) 
       reason: (insert reason here)
     }

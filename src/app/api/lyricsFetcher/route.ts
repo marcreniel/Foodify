@@ -13,9 +13,10 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
+        const name = searchParams.get('song');
         const lyricsResponse = await getLyrics(id);
         const combinedWords = lyricsResponse.lines.map(line => line.words).join(' ');
-        const llmResponse = await fetchLLM(combinedWords);
+        const llmResponse = await fetchLLM(combinedWords, name);
 
         return NextResponse.json({ llmResponse });
     } catch (error) {
