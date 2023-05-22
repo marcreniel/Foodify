@@ -1,5 +1,5 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { getTopTracks } from '@/app/utils/handler';
+import { getTopTracks } from '@/app/utils/handlers';
 import { getServerSession } from 'next-auth/next'
 import { NextResponse } from 'next/server'
 

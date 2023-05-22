@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 const Main: NextPage = () => {
   const router = useRouter();
   const [songList, setSongList] = useState([]);
-  const [lyricsList, setLyricsList] = useState([]);
+  const [lyricsList, setLyricsList] = useState<JSON[]>([]);
   const { data, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -23,17 +23,19 @@ const Main: NextPage = () => {
   const getTracks = async () => {
     const lyricsHolder: JSON[] = []; 
     const res = await fetch('/api/topTracks');
-    const {items} = await res.json();
+    const { items } = await res.json();
     setSongList(items); 
-
-    await items.forEach(async(item) => {
+    console.log(items);
+  
+    await Promise.all(items.map(async (item) => {
       const lyricsRes = await fetch(`/api/lyricsFetcher?id=${item.id}`);
       const lyrics = await lyricsRes.json();
-      lyricsList.push(lyrics);
-      setLyricsList(lyricsHolder as never[])
-      console.log(lyricsList);
-    }); 
+      lyricsHolder.push(lyrics);
+    }));
+  
+    setLyricsList(lyricsHolder);
   };
+  
 
   if(status === 'authenticated') {
     return (
@@ -50,11 +52,16 @@ const Main: NextPage = () => {
         <div>
           <button onClick={() => signOut()} className="btn">Sign Out</button>
         </div>
-        {songList.map((item) => (
-            <div key={item.id}>
-              <h1>{item.name}</h1>
-            </div>
-          ))}
+        {[...songList, ...lyricsList].map((item) => (
+          <div key={item.id}>
+            {item.name && item.llmResponse && (
+              <h1>{`${item.name} - ${item.llmResponse.food}`}</h1>
+            )}
+            {item.llmResponse && (
+              <p>{item.llmResponse.reason}</p>
+            )}
+          </div>
+        ))}
       </main>
     )
   }
